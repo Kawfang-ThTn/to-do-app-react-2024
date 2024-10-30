@@ -2,13 +2,13 @@ import React , {useState} from 'react';
 
 function App() {
   
-  const [todo , setTodo] = useState([]);
+  const [todos , setTodos] = useState([]);
   const [input , setInput] = useState("");
 
   const addTodo = () => {
     if( input.trim() ){
 
-      setTodo( [...todo , {id : Date.now() , text : input , completed : false} ] )
+      setTodos( [...todos , {id : Date.now() , text : input , completed : false} ] )
       
       setInput("")
     }
@@ -24,7 +24,9 @@ function App() {
 
           <div className="mb-4 flex">
 
-            <input type="text" placeholder="Type To-Do List" className="flex-grow px-3 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400" value={input} onChange={(event) => setInput(event.target.value) }  />
+            <input type="text" placeholder="Type What To Do" className="flex-grow px-3 py-2 border rounded-l-lg 
+            focus:outline-none focus:ring-2 focus:ring-blue-400" 
+            value={input} onChange={(event) => setInput(event.target.value) }  />
             
             <button className="bg-blue-400 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600" onClick={addTodo} >Add</button>
           
@@ -34,14 +36,24 @@ function App() {
 
         <ul className="space-y-2">
           {
-            todo.map((todo) => (
+            todos.map((todo) => (
               <li key={todo.id} className="flex items-center p-3 rounded-lg bg-slate-100 border border-gray-200" >
                 
-                <input type="checkbox" checked={todo.completed} onChange={ () => setTodo(todo.map((t) => (t.id === todo.id ? {...t , completed : !t.completed} : t)))} className="mr-2 h-5 w-5 text-blue-400" />
+                <input 
+                  type="checkbox" 
+                  checked={todo.completed} 
+                  onChange={() => setTodos(todos.map((t) => 
+                  (t.id === todo.id ? {...t, completed: !t.completed} : t)
+                  ))} 
+                  className="mr-2 h-5 w-5 text-blue-400" 
+                  />
+                <span className={`flex-grow ${todo.completed ? "line-through text-gray-400" : "text-gray-800"}`}>
+                {todo.text}
+                </span>
 
-                <span className={`flex-grow ${todo.completed ? "line-through text-gray-400" : "text-gray-800"}`} >{todo.text}</span>
 
-                <button onClick={() => setTodo(todo.filter((t) => t.id !== todo.id))} className="ml-2 border-none p-2 rounded-lg bg-red-400 text-white hover:bg-red-600" >Delete</button>
+                <button onClick={() => setTodos(todos.filter((t) => t.id !== todo.id))} 
+                  className="ml-2 border-none p-2 rounded-lg bg-red-400 text-white hover:bg-red-600" >Delete</button>
 
               </li>
             ))
